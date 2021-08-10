@@ -10,6 +10,8 @@ npm init -y
 npm i -D webpack webpack-cli
 ```
 
+## JSファイルをバンドルする
+
 その後、 `src` フォルダを作成してそこにJavaScriptファイルを `main.js` , `sub.js` 2つ作成する。
 
 index.js
@@ -35,3 +37,35 @@ export function test() {
 その代わりビルドに時間がかかる。
 
 開発用はビルド時間を短くできる。
+
+指定方法は `--mode` オプションを使用する。
+
+```bash
+# 開発用のビルド
+webpack --mode development
+
+# 本番用のビルド
+webpack --mode production
+
+```
+
+いちいち指定するのは面倒なのでpackage.jsonにコマンドを登録する。
+
+packkage.json
+
+```json
+// package.jsonの一部
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    // 下記が追加したコマンド
+    "build": "webpack --mode development",
+    "prod": "webpack --mode production"
+  },
+```
+
+実行方法は
+
+```bash
+npm run build
+npm run prod
+```
