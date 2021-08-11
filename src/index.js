@@ -1,3 +1,1 @@
-import { test } from './sub'
-
-test()
+import './style.css'
