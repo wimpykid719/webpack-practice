@@ -18,12 +18,19 @@ module.exports = {
     filename: 'main.js'
   },
 
+  // useはしたから実行されていく。
+  // sassをcssに変換 → cssをバンドル → htmlにstyleタグを使ってcssを記述する。順番で実行される。
   module: {
     rules: [
       {
-        test:/\.css$/,
-        use:['style-loader', 'css-loader']
-      }
+        test:/\.scss$/,
+        use:[
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ]
+      },
     ]
   }
 }

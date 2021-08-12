@@ -1,0 +1,17 @@
+h1 {
+  font-size: 2rem;
+  transition: all .3s;
+  color: blue;
+
+  &:hover {
+    transform: translateX(50px);
+    color: red;
+  }
+}
+
+.bg {
+  background-image: url('./images/doodle.png');
+  background-size: cover;
+  width: 100px;
+  height: 100px;
+}

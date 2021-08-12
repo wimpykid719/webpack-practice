@@ -73,6 +73,7 @@ npm run prod
 ## webpack.config.jsでwebpackの設定をする。
 
 設定ファイルを作成してwebpackの設定をする。
+ファイル名は `webpack.config.js` じゃなくても `webpack.dev.js` でも良いしかしその場合はオプション `--config` でファイルを指定する必要がある。
 
 ```js
 const path = require('path')
@@ -95,4 +96,75 @@ module.exports = {
     filename: 'main.js'
   }
 }
+```
+
+その他設定オプション
+
+- mode： あらかじめビルドを `development`, `production` を決めれる。
+- output: { filename: }: ビルドして出力されるファイル名を設定できる。
+
+## scssファイルにも対応させる。
+
+```bash
+npm i -D sass sass-loader
+```
+
+## postcssにも対応させる
+
+ベンダープレフィックス（-web-kit-等ブラウザ毎の若干の差異）を付与してくれる。
+
+```bash
+npm i -D postcss-loader autoprefixer
+```
+
+新しく `postcss.config.js` ファイルを作成して
+
+```js
+// 古いブラウザにも対応出来るようにベンダープレフィックスを付ける。
+module.exports = {
+  plugins: [
+    require('autoprefixer')
+  ]
+}
+```
+
+webpack.config.jsには下記のように `postcss-loader` を追加する。
+
+```
+module: {
+    rules: [
+      {
+        test:/\.scss$/,
+        use:[
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ]
+      },
+    ]
+  }
+```
+
+
+## ファイルを読み込む
+
+以前は `file-loader` をインストールして `webpack.config.js` に追加の設定が必要だったがwebpack5からインストール不要となったので設定せずにそのままバンドル可能。
+
+```js
+// webpackの設定
+{
+  test: /\.(jpe?g|gif|png|svg|woff2?|tff|eot)$/,
+  use: [
+    {
+      loader: 'file-loader',
+      options: {
+        name: '[name].[ext]',
+        outputPath: 'images',
+        publicPath: 'images'
+      }
+    }
+  ]
+}
+
 ```
