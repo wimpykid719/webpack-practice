@@ -122,8 +122,8 @@ npm i -D postcss-loader autoprefixer
 ```js
 // 古いブラウザにも対応出来るようにベンダープレフィックスを付ける。
 module.exports = {
-  plugins: [
-    require('autoprefixer')
+  plugins: (
+    require)'autoprefixer')
   ]
 }
 ```
@@ -150,6 +150,7 @@ module: {
 ## ファイルを読み込む
 
 以前は `file-loader` をインストールして `webpack.config.js` に追加の設定が必要だったがwebpack5からインストール不要となったので設定せずにそのままバンドル可能。
+画像のURLはデフォルトではハッシュ値になるので、buildして吐き出される画像の名前が元の奴とは異なるものになる。
 
 ```js
 // webpackの設定
@@ -168,3 +169,6 @@ module: {
 }
 
 ```
+
+### 参照
+[【Webpack5】file-loaderを使った画像の読み込みがうまくいかない](https://teratail.com/questions/327351)

@@ -5,18 +5,22 @@ module.exports = {
   context: `${__dirname}/src`,
   // entry: './index.js',
   // joinを使用するとOSの環境に合わせてパスをいい感じに設定してくれる。
-  entry: path.join(__dirname, '/src', 'index.js'),
+  entry: {
+    app: path.join(__dirname, '/src', 'app.js'),
+    sub: path.join(__dirname, '/src', 'sub.js')
+    
+  },
 
   // defaultの設定つまりあってもなくても一緒
   // ファイルの起点を設定する。
   // entry: './src/index.js',
 
   // ここは絶対パスで指定する必要がある。
-  output: {
-    // path: `${__dirname}/dist`,
-    path: path.join(__dirname, '/dist'),
-    filename: 'main.js'
-  },
+  // output: {
+  //   // path: `${__dirname}/dist`,
+  //   path: path.join(__dirname, '/dist'),
+  //   filename: 'main.js'
+  // },
 
   // useはしたから実行されていく。
   // sassをcssに変換 → cssをバンドル → htmlにstyleタグを使ってcssを記述する。順番で実行される。
