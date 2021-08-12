@@ -27,6 +27,17 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        // eslint導入方法
+        use:[
+          // 'style-loader',
+          'babel-loader',
+          'eslint-loader'
+        ],
+        loader: 'babel-loader'
+      },
+      {
         test:/\.scss$/,
         use:[
           // 'style-loader',

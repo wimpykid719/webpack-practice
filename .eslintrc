@@ -1,0 +1,7 @@
+{
+  "env": {
+    "es2017": true
+  },
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint"
+}
