@@ -149,7 +149,7 @@ module: {
 
 ## ファイルを読み込む
 
-以前は `file-loader` をインストールして `webpack.config.js` に追加の設定が必要だったがwebpack5からインストール不要となったので設定せずにそのままバンドル可能。
+以前は `file-loader` をインストールして `webpack.config.js` に下記の追加設定が必要だったがwebpack5からインストール不要となったので設定せずにそのままバンドル可能。
 画像のURLはデフォルトではハッシュ値になるので、buildして吐き出される画像の名前が元の奴とは異なるものになる。
 
 ```js
@@ -170,5 +170,41 @@ module: {
 
 ```
 
+## main.jsにバンドルせずに複数のファイルに吐き出す
+
+まず `entry` ポイントを複数設定する。そして `output` の `filename` に `'[name].main.js'` を追加すると `app.main.js, sub.main.js` という2つのファイルが出力されるようになる。
+
+```js
+// webpack.config.jsの一部
+ entry: {
+    app: path.join(__dirname, '/src', 'app.js'),
+    sub: path.join(__dirname, '/src', 'sub.js')
+  },
+
+  output: {
+    // path: `${__dirname}/dist`,
+    path: path.join(__dirname, '/dist'),
+    filename: '[name].main.js'
+  },
+```
+
+## ハッシュ値について
+
+![disk-cache](https://user-images.githubusercontent.com/23703281/129139957-ed0d6a71-38b6-4d5c-a6ec-6f52caa033b7.png)
+
+chromeブラウザの検証 > ネットワークで画像がローカルにキャッシュとして残っているか確認できる。
+disk cacheと書かれている場合はローカルのストレージにファイルが保存されており、高速化出来ている。
+
+ブラウザにはキャッシュの機能があるので画像を更新してもファイル名が同じ場合キャッシュを読み込み変更が適用されないことがある。そのためwebpackではビルドするたびにハッシュ値を変更する設定がある。
+
+その設定は複数あり上記の `'[name].main.js'` の `[name]` 部分を `[hash]` 等に変更する事で設定できる。
+
+- `[hash]`： ビルドした時で同じハッシュ値がそれぞれのファイルに付けられる。しかしファイルに変更がない場合は同じハッシュ値のままになる。
+- `[contenthash]`: 生成されたファイル毎にハッシュ値が付く。画像ファイルによく用いられる。
+- `[chunkhash]`: import等で繋がりがあるファイル同士が同じハッシュ値になる。
+
+
 ### 参照
 [【Webpack5】file-loaderを使った画像の読み込みがうまくいかない](https://teratail.com/questions/327351)
+
+[Conflict: Multiple assets emit to the same filename](https://stackoverflow.com/questions/42148632/conflict-multiple-assets-emit-to-the-same-filename)
