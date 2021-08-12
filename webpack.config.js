@@ -29,13 +29,19 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        // eslint導入方法
-        use:[
-          // 'style-loader',
-          'babel-loader',
-          'eslint-loader'
-        ],
+        // // eslint導入方法
+        // use:[
+        //   // 'style-loader',
+        //   'babel-loader',
+        //   'eslint-loader'
+        // ],
         loader: 'babel-loader'
+      },
+      {
+        enforce: 'pre',
+        test:/\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader'
       },
       {
         test:/\.scss$/,
