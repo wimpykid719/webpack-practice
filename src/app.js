@@ -8,8 +8,10 @@ import './app.scss'
 // async awaitの機能を古いバージョンのjsでも補ってくれる。
 // import 'regenerator-runtime'
 
+const heheheheheheheheheheheheh = 'pakemongetdaze'
+
 const init = async () => {
-  console.log('hi')
+  console.log(heheheheheheheheheheheheh)
   await asyncFn()
 }
 

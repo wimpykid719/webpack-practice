@@ -1,0 +1,21 @@
+/*!************************************************************************************************************************************************!*\
+  !*** css ../node_modules/css-loader/dist/cjs.js!../node_modules/postcss-loader/dist/cjs.js!../node_modules/sass-loader/dist/cjs.js!./app.scss ***!
+  \************************************************************************************************************************************************/
+h1 {
+  font-size: 2rem;
+  transition: all 0.3s;
+  color: blue;
+}
+h1:hover {
+  transform: translateX(50px);
+  color: red;
+}
+
+.bg {
+  background-image: url(images/doodle.png);
+  background-size: cover;
+  width: 100px;
+  height: 100px;
+}
+
+/*# sourceMappingURL=app.css.map*/

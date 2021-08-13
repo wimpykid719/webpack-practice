@@ -214,3 +214,14 @@ disk cacheと書かれている場合はローカルのストレージにファ�
 ESLint 環境プロパティ
 
 [Specifying Environments](https://eslint.org/docs/user-guide/configuring/language-options#specifying-environments)
+
+webpack-mergeのimportの仕方がwebpack5から変更された。
+
+[Getting Error from webpack-cli: “TypeError: merge is not a function” in webpack config](https://stackoverflow.com/questions/62846123/getting-error-from-webpack-cli-typeerror-merge-is-not-a-function-in-webpack)
+
+webpack5 から optimize-css-assets-webpack-pluginは非推奨となりcss-minimizer-webpack-pluginを使用する。
+下記の質問ではなんでcssしか圧縮されないそして `...` 使用した際jsが圧縮されるのなんでという投稿者に問いに回答が付いてる。
+[Why is CssMinimizerWebpackPlugin preventing my main js file from being minified?](https://stackoverflow.com/questions/66630656/why-is-cssminimizerwebpackplugin-preventing-my-main-js-file-from-being-minified)
+
+terser-webpack-pluginはwebpack5からはデフォルトでインストールされるので追加する必要がないというドキュメント、しかしサンプルコードはwebpack4のしかないためどうやって使ったらいいのという質問が投げかけられてる。これはGitHubのissueにもドキュメント分かりにくすぎと上がっていた。
+[Use latest terser-webpack-plugin with Webpack5](https://stackoverflow.com/questions/66343602/use-latest-terser-webpack-plugin-with-webpack5)

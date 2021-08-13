@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "cleanup": "rimraf ./dist",
-    "dev": "npm run cleanup && webpack --config ./webpack.dev.js",
+    "dev": "npm run webpack:dev && npm run webpack:server",
+    "webpack:server": "webpack server --config ./webpack.dev.js",
+    "webpack:dev": "npm run cleanup && webpack --config ./webpack.dev.js",
     "prod": "npm run cleanup && webpack --config ./webpack.prod.js"
   },
   "keywords": [],
@@ -20,6 +22,7 @@
     "babel-loader": "^8.2.2",
     "core-js": "^3.16.1",
     "css-loader": "^6.2.0",
+    "css-minimizer-webpack-plugin": "^3.0.2",
     "eslint": "^7.32.0",
     "eslint-loader": "^4.0.2",
     "html-loader": "^2.1.2",
@@ -33,6 +36,7 @@
     "style-loader": "^3.2.1",
     "webpack": "^5.49.0",
     "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.8.0"
   }
 }
