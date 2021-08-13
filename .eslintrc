@@ -1,7 +1,26 @@
 {
+  // この環境に設定するとどの環境でJSが実行されるのかESLintに伝えられる。
+  // それに必要なグローバル変数をESLintが考慮してくれる。
   "env": {
+    "node": true,
+    "browser": true,
     "es2017": true
   },
   "extends": "eslint:recommended",
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
+  },
+  // jQueryをimportしなくてもESlintが認識してくれる。
+  "globals": {
+    "jQuery": "readonly", //or writable
+    "$": "readonly"
+
+  },
+  // たくさんのルールがあるのでまずは extendsでeslint:recommendedを設定してそこから
+  // ルールを上書きして徐々に増やしていく。
+  "rules": {
+    "semi": ["error", "never"]
+  }
 }

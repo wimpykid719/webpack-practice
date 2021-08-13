@@ -208,3 +208,9 @@ disk cacheと書かれている場合はローカルのストレージにファ�
 [【Webpack5】file-loaderを使った画像の読み込みがうまくいかない](https://teratail.com/questions/327351)
 
 [Conflict: Multiple assets emit to the same filename](https://stackoverflow.com/questions/42148632/conflict-multiple-assets-emit-to-the-same-filename)
+
+[Configuring ESLint - 日本語訳](https://jtfal.com/docs/eslint/user-guide/configuring/)
+
+ESLint 環境プロパティ
+
+[Specifying Environments](https://eslint.org/docs/user-guide/configuring/language-options#specifying-environments)

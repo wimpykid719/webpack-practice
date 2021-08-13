@@ -1,4 +1,5 @@
 const path = require('path')
+// jsファイルにバンドルされるはずのcssを分離できる。
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
@@ -41,7 +42,11 @@ module.exports = {
         enforce: 'pre',
         test:/\.js$/,
         exclude: /node_modules/,
-        loader: 'eslint-loader'
+        loader: 'eslint-loader',
+        // eslintのfixオプションをonにするルールに基づいてコードを整形してくれる。
+        options: {
+          fix: true,
+        }
       },
       {
         test:/\.scss$/,
