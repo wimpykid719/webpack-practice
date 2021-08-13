@@ -22,7 +22,8 @@ module.exports = {
   output: {
     // path: `${__dirname}/dist`,
     path: path.join(__dirname, '/dist'),
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js',
+    assetModuleFilename: "images/[contenthash][ext]",
   },
 
   // useはしたから実行されていく。
@@ -60,6 +61,17 @@ module.exports = {
           'sass-loader'
         ]
       },
+      {
+        test: /\.(ico|svg|jpe?g|png|webp)$/,
+        type: "asset/resource",   // <--- 'file-loader'
+        // または
+        // type: 'asset/inline',  // <--- 'url-loader'
+      },
+      {
+        // htmlWebpackPluginと併用しないと動作しない
+        test: /\.html$/,
+        use: ['html-loader']
+      }
     ]
   },
   plugins: [
