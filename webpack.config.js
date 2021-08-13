@@ -1,6 +1,8 @@
 const path = require('path')
-// jsファイルにバンドルされるはずのcssを分離できる。
+// jsファイルにバンドルされるはずのcssを分離できる。cssに変更がない場合はキャッシュを利用できるので商用環境では分離をオススメする。
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   // 作業ディレクトリがある場合はentryの書き方が変わる
@@ -64,6 +66,10 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].[chunkhash].css',
       // chunkFilename: '[name].[hash].css'
-    })
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '/src', 'index.html'),
+      inject: 'body'
+    }),
   ]
 }
