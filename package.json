@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode development",
-    "prod": "webpack --mode production"
+    "cleanup": "rimraf ./dist",
+    "dev": "npm run cleanup && webpack --config ./webpack.dev.js",
+    "prod": "npm run cleanup && webpack --config ./webpack.prod.js"
   },
   "keywords": [],
   "author": "",
@@ -26,10 +27,12 @@
     "mini-css-extract-plugin": "^2.2.0",
     "postcss-loader": "^6.1.1",
     "regenerator-runtime": "^0.13.9",
+    "rimraf": "^3.0.2",
     "sass": "^1.37.5",
     "sass-loader": "^12.1.0",
     "style-loader": "^3.2.1",
     "webpack": "^5.49.0",
-    "webpack-cli": "^4.7.2"
+    "webpack-cli": "^4.7.2",
+    "webpack-merge": "^5.8.0"
   }
 }

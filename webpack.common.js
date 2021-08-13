@@ -2,9 +2,8 @@ const path = require('path')
 // jsファイルにバンドルされるはずのcssを分離できる。cssに変更がない場合はキャッシュを利用できるので商用環境では分離をオススメする。
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-module.exports = {
+module.exports = ({ outputFile, assetFile }) => ({
   // 作業ディレクトリがある場合はentryの書き方が変わる
   context: `${__dirname}/src`,
   // entry: './index.js',
@@ -22,8 +21,8 @@ module.exports = {
   output: {
     // path: `${__dirname}/dist`,
     path: path.join(__dirname, '/dist'),
-    filename: '[name].[chunkhash].js',
-    assetModuleFilename: "images/[contenthash][ext]",
+    filename: `${outputFile}.js`,
+    assetModuleFilename: `images/${assetFile}[ext]`, // 分割
   },
 
   // useはしたから実行されていく。
@@ -76,12 +75,8 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].[chunkhash].css',
+      filename: `${outputFile}.css`, // 分割
       // chunkFilename: '[name].[hash].css'
     }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, '/src', 'index.html'),
-      inject: 'body'
-    }),
   ]
-}
+})
