@@ -1,6 +1,9 @@
 const path = require('path')
 // jsファイルにバンドルされるはずのcssを分離できる。cssに変更がない場合はキャッシュを利用できるので商用環境では分離をオススメする。
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// const webpack = require('webpack')
+// こうする事で個別でimport出来る。分割代入
+const { ProvidePlugin } = require('webpack')
 
 
 module.exports = ({ outputFile, assetFile }) => ({
@@ -78,5 +81,11 @@ module.exports = ({ outputFile, assetFile }) => ({
       filename: `${outputFile}.css`, // 分割
       // chunkFilename: '[name].[hash].css'
     }),
+    // よく使用するモジュールをimportせずにグローバルにバンドルする事ができる。
+    // これによってapp.js, sub.jsでjqueryが使用できる。
+    new ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery'
+    })
   ]
 })
