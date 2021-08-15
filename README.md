@@ -225,3 +225,6 @@ webpack5 から optimize-css-assets-webpack-pluginは非推奨となりcss-minim
 
 terser-webpack-pluginはwebpack5からはデフォルトでインストールされるので追加する必要がないというドキュメント、しかしサンプルコードはwebpack4のしかないためどうやって使ったらいいのという質問が投げかけられてる。これはGitHubのissueにもドキュメント分かりにくすぎと上がっていた。
 [Use latest terser-webpack-plugin with Webpack5](https://stackoverflow.com/questions/66343602/use-latest-terser-webpack-plugin-with-webpack5)
+
+dockerで建てた環境からのwebpack-dev-serverにアクセスする方法
+[Dockerでwebpack-dev-serverを起動してホストからアクセスする](https://zukucode.com/2020/05/webpack-dev-server-docker.html)

@@ -1,4 +1,5 @@
 import './app.scss'
+import utils from './utils'
 // import { test } from './sub'
 
 
@@ -13,6 +14,7 @@ const heheheheheheheheheheheheh = 'pakemongetdaze'
 const init = async () => {
   console.log(heheheheheheheheheheheheh)
   await asyncFn()
+  utils.log('hello from app.js')
 }
 
 async function asyncFn() {
@@ -20,3 +22,4 @@ async function asyncFn() {
 }
 
 init()
+jQuery()

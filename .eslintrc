@@ -15,7 +15,8 @@
   // jQueryをimportしなくてもESlintが認識してくれる。
   "globals": {
     "jQuery": "readonly", //or writable
-    "$": "readonly"
+    "$": "readonly",
+    "utils": "readonly"
 
   },
   // たくさんのルールがあるのでまずは extendsでeslint:recommendedを設定してそこから

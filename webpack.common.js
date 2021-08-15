@@ -85,7 +85,32 @@ module.exports = ({ outputFile, assetFile }) => ({
     // これによってapp.js, sub.jsでjqueryが使用できる。
     new ProvidePlugin({
       jQuery: 'jquery',
-      $: 'jquery'
+      $: 'jquery',
+      // オリジナル関数をimportなしで使えるようにする。
+      utils: [path.resolve(__dirname, 'src/utils'), 'default']
     })
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      // chunksがasyncだとダイナックimportと呼ばれる非同期のimport方法のみに設定が適用される。
+      // import('./app.scss')
+      // allは普通のimportとダイナミックを分けずにimportする。
+      chunks: 'all',
+      minSize: 0,
+      cacheGroups: {
+        defaultVendors: {
+          name: 'vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true,
+        },
+        // オリジナルの関数をキャッシュに追加する。
+        utils: {
+          name: 'utils',
+          test: /node_modules/
+        },
+        default: false,
+      }
+    }
+  }
 })

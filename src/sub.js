@@ -3,3 +3,5 @@ export function test() {
 }
 
 test()
+
+jQuery()
