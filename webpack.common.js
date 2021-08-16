@@ -13,7 +13,7 @@ module.exports = ({ outputFile, assetFile }) => ({
   // joinを使用するとOSの環境に合わせてパスをいい感じに設定してくれる。
   entry: {
     app: path.join(__dirname, '/src', '/js', 'app.js'),
-    // sub: path.join(__dirname, '/src', '/js', 'sub.js')
+    sub: path.join(__dirname, '/src', '/js', 'sub.js')
   },
 
   // defaultの設定つまりあってもなくても一緒
@@ -110,7 +110,7 @@ module.exports = ({ outputFile, assetFile }) => ({
         utils: {
           name: 'utils',
           test: /src/,
-          chunks: 'async'
+          chunks: 'initial' //ここを消すと非同期の読み込みでも同期的な読み込みに変わる。
         },
         default: false,
       }

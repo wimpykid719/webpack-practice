@@ -24,7 +24,17 @@ module.exports = () => merge(commonConf({ outputFile, assetFile }),  {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, '/src', 'index.html'),
-      inject: 'body' // 分割
+      inject: 'body', // 分割
+      // app.jsを代入したい場合は下記を記述する。
+      // app.jsはscssとjqueryに依存している。
+      chunks: ['app']
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '/src', 'other.html'),
+      filename: 'other.html',
+      inject: 'body', // 分割
+      // sub.jsはjqueryに依存している。
+      chunks: ['sub']
     })
   ]
 })
