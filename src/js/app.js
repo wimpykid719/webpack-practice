@@ -1,6 +1,8 @@
-import './app.scss'
-import utils from './utils'
-// import { test } from './sub'
+import "@scss/app"
+setTimeout(() => {
+  import('js/sub')
+}, 2000)
+// import utils from './utils'
 
 
 // ただ下記のimportを行うとビルドファイルが膨大になるので, babelの設定から必要な機能だけ含めるようにする。
@@ -23,3 +25,5 @@ async function asyncFn() {
 
 init()
 jQuery()
+
+

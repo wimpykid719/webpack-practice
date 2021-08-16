@@ -8,12 +8,12 @@ const { ProvidePlugin } = require('webpack')
 
 module.exports = ({ outputFile, assetFile }) => ({
   // 作業ディレクトリがある場合はentryの書き方が変わる
-  context: `${__dirname}/src`,
+  context: `${__dirname}/src/js`,
   // entry: './index.js',
   // joinを使用するとOSの環境に合わせてパスをいい感じに設定してくれる。
   entry: {
-    app: path.join(__dirname, '/src', 'app.js'),
-    sub: path.join(__dirname, '/src', 'sub.js')
+    app: path.join(__dirname, '/src', '/js', 'app.js'),
+    // sub: path.join(__dirname, '/src', '/js', 'sub.js')
   },
 
   // defaultの設定つまりあってもなくても一緒
@@ -26,7 +26,9 @@ module.exports = ({ outputFile, assetFile }) => ({
     path: path.join(__dirname, '/dist'),
     filename: `${outputFile}.js`,
     assetModuleFilename: `images/${assetFile}[ext]`, // 分割
+    chunkFilename: `${outputFile}.js`
   },
+
 
   // useはしたから実行されていく。
   // sassをcssに変換 → cssをバンドル → htmlにstyleタグを使ってcssを記述する。順番で実行される。
@@ -87,7 +89,7 @@ module.exports = ({ outputFile, assetFile }) => ({
       jQuery: 'jquery',
       $: 'jquery',
       // オリジナル関数をimportなしで使えるようにする。
-      utils: [path.resolve(__dirname, 'src/utils'), 'default']
+      utils: [path.join(__dirname, 'src/js/utils'), 'default']
     })
   ],
   optimization: {
@@ -102,15 +104,32 @@ module.exports = ({ outputFile, assetFile }) => ({
           name: 'vendors',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          reuseExistingChunk: true,
+          // reuseExistingChunk: true,
         },
         // オリジナルの関数をキャッシュに追加する。
         utils: {
           name: 'utils',
-          test: /node_modules/
+          test: /src/,
+          chunks: 'async'
         },
         default: false,
       }
     }
+  },
+  // ファイル等をimportする際にPathを入力しやすくするためにシュートカットを作成する。
+  // 階層が複雑な際に使用すると便利です。
+  resolve: {
+    alias: {
+      '@scss': path.join(__dirname, 'src/scss'),
+      '@images': path.join(__dirname, 'src/images') 
+    },
+    // importする際の拡張子を省略できる。
+    // import '@scss/app.scss' → '@scss/app'
+    extensions: ['.js', '.scss'],
+    // これを追加すると import jQuery from './node_modules/jquery'
+    // みたいな書き方をしなくてよい。
+    // これに自作のコードも追加する。すると import 'js/sub' でコードを読み込めるようになる。
+    // 画像ファイルの読み込みにも適用される。 
+    modules: [path.join(__dirname, 'src'), 'node_modules']
   }
 })

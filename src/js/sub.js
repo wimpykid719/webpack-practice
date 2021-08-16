@@ -1,7 +1,6 @@
 export function test() {
-  alert('テスト実行')
+  console.log('こちらはsub.jsです')
 }
 
 test()
-
 jQuery()

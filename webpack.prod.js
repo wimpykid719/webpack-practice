@@ -11,6 +11,14 @@ const assetFile = '[contenthash]'
 
 module.exports = () => merge(commonConf({ outputFile, assetFile }),  {
   mode: 'production', //分割
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    port: 8080,
+    host: '0.0.0.0',
+    watchOptions: {
+      ignored: /node_modules/
+    }
+  },
   
   plugins: [
     new HtmlWebpackPlugin({

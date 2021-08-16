@@ -10,7 +10,8 @@ h1 {
 }
 
 .bg {
-  background-image: url('./images/doodle.png');
+  // background-image: url('~@images/doodle.png');
+  background-image: url('~images/doodle.png');
   background-size: cover;
   width: 100px;
   height: 100px;

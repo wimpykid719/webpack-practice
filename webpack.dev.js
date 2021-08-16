@@ -19,6 +19,7 @@ module.exports = () => merge(commonConf({ outputFile, assetFile }),  {
       ignored: /node_modules/
     }
   },
+ 
   
   plugins: [
     new HtmlWebpackPlugin({
