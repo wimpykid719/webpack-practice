@@ -109,7 +109,7 @@ module.exports = ({ outputFile, assetFile }) => ({
         // オリジナルの関数をキャッシュに追加する。
         utils: {
           name: 'utils',
-          test: /src/,
+          test: /src[\\/]js[\\/]utils/,
           chunks: 'initial' //ここを消すと非同期の読み込みでも同期的な読み込みに変わる。
         },
         default: false,

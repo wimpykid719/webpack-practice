@@ -16,8 +16,7 @@
   "globals": {
     "jQuery": "readonly", //or writable
     "$": "readonly",
-    "utils": "readonly",
-
+    "utils": "readonly"
   },
   // たくさんのルールがあるのでまずは extendsでeslint:recommendedを設定してそこから
   // ルールを上書きして徐々に増やしていく。

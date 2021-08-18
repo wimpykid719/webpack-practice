@@ -2,6 +2,8 @@ setTimeout(() => {
   import("@scss/app")
 }, 2000)
 // import utils from './utils'
+// import 'regenerator-runtime'
+// import 'core-js'
 
 
 // ただ下記のimportを行うとビルドファイルが膨大になるので, babelの設定から必要な機能だけ含めるようにする。

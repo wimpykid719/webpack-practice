@@ -1,6 +1,29 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({});
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./sub.js":
+/*!****************!*\
+  !*** ./sub.js ***!
+  \****************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "test": () => (/* binding */ test)
+/* harmony export */ });
+/* provided dependency */ var utils = __webpack_require__(/*! ./utils */ "./utils/index.js")["default"];
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "../../node_modules/jquery/dist/jquery.js");
+function test() {
+  console.log('こちらはsub.jsです');
+  utils.log('hello from sub.js');
+}
+test();
+jQuery();
+
+/***/ })
+
+/******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -62,18 +85,6 @@
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -84,14 +95,6 @@
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/ensure chunk */
-/******/ 	(() => {
-/******/ 		// The chunk loading function for additional chunks
-/******/ 		// Since all referenced chunks are already included
-/******/ 		// in this file, this function is empty here.
-/******/ 		__webpack_require__.e = () => (Promise.resolve());
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
@@ -178,7 +181,7 @@
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["utils"], () => (__webpack_require__("./sub.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["utils","vendors"], () => (__webpack_require__("./sub.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

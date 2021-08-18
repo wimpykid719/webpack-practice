@@ -11,7 +11,8 @@ module.exports = api => {
           "not dead"
         ],
         useBuiltIns: "usage",
-        corejs: 3
+        corejs: 3,
+        debug: true
       }]
     ]
   }
