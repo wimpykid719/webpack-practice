@@ -1,5 +1,9 @@
+// ここでsub.jsを読み込もうとするとsub_js.jsみたいな変なファイルが生成される。
+// import("js/sub")
+
+import("@scss/app")
 setTimeout(() => {
-  import("@scss/app")
+  import("js/sub")
 }, 2000)
 // import utils from './utils'
 // import 'regenerator-runtime'

@@ -70,7 +70,7 @@ npm run build
 npm run prod
 ```
 
-## webpack.config.jsでwebpackの設定をする。
+## webpack.config.jsでwebpackの設定をする
 
 設定ファイルを作成してwebpackの設定をする。
 ファイル名は `webpack.config.js` じゃなくても `webpack.dev.js` でも良い、しかしその場合はオプション `--config` でファイルを指定する必要がある。
@@ -103,7 +103,7 @@ module.exports = {
 - mode： あらかじめビルドを `development`, `production` を決めれる。
 - output: { filename: }: ビルドして出力されるファイル名を設定できる。
 
-## scssファイルにも対応させる。
+## scssファイルにも対応させる
 
 ```bash
 npm i -D sass sass-loader
@@ -350,7 +350,7 @@ webpack.config.jsにeslintの設定をrulesに追記する。
 
 - fix: eslintでエラーになった箇所で直せる部分は自動で修正してくれる。
 
-## JSファイルにバンドルされるcssを分離する。
+## JSファイルにバンドルされるcssを分離する
 
 JSファイルとCSSを分離する。cssに変更がない際はキャッシュを用いる事のでパフォーマンス向上を狙える。そのために必要なMiniCssExtractPluginをインストールする。HTTP1の時代は複数ファイルを読み込むと速度が遅くなるということがあり、なんでも一つのファイルにする風潮があったが、現在のHTTPプロトコルはHTTP2が主流であり複数ファイルを読み込んでも速度低下する事がなくキャッシュの恩師を受けた方がパフォーマンス改善になるためJSとCSSを分離する。
 
@@ -408,7 +408,7 @@ plugins: [
 
 ```
 
-## HTML内の画像がハッシュ値でも読み込めるように設定する。
+## HTML内の画像がハッシュ値でも読み込めるように設定する
 
 上記のhtmlWebpackPluginと併用して使う。
 
@@ -428,7 +428,7 @@ webpack.config.js
 }
 ```
 
-## 共通モジュール（Jquery等）をプロバイダーに登録してimportの記述を省略する。
+## 共通モジュール（Jquery等）をプロバイダーに登録してimportの記述を省略する
 
 `ProvidePlugin` は webpackに元々入ってるの下記のimport文を追加する事で使用できるようになる。
 下記は `webpack.ProvidePlugin` と記述するのを省略するためにオブジェクトリテラルを使って分割代入をする。
@@ -450,7 +450,7 @@ new ProvidePlugin({
 
 ```
 
-## SplitChunksを使ってモジュールと自作ファイルを適切に分ける。
+## SplitChunksを使ってモジュールと自作ファイルを適切に分ける
 
 `app.js` と `sub.js` それぞれで Jqueryを読み込んでいる時、今ままでの設定ではビルドした際に両方のファイルにjqueryがバンドルされているという無駄があったため、それを `vender.js` にまとめてそれぞれのjsファイルで読み込んでもらう事にする。 
 
@@ -458,8 +458,8 @@ webpack.config.jsに `module` に下記の設定を追加する。
 
 ```js
 optimization: {
-    splitChunks: {
-      // chunksがasyncだとダイナックimportと呼ばれる非同期のimport方法のみに設定が適用される。
+  splitChunks: {
+    // chunksがasyncだとダイナックimportと呼ばれる非同期のimport方法のみに設定が適用される。
       // import('./app.scss')
       // allは普通のimportとダイナミックを分けずにimportする。
       chunks: 'all',
@@ -479,15 +479,381 @@ optimization: {
 
 ビルドすると `venders.js` が生成される。
 
-## Rsolveを使用してファイルパスを短くする。
+## SplitChunksを使って非同期読み込みのファイルをバンドルする
+
+上記のコードにある `optimization: {splitChunks: {ここに}}` に下記のコードを追加する。
+すると `app.js` に記述した `import("js/sub")` の `sub.js` と `utils/index.js` がバンドルされて `utils.js` になり非同期で読み込まれるようになる。index.htmlのheadタグに注入されて実行されたら消えるようになる。
+
+```js
+// オリジナルの関数をキャッシュに追加する。
+utils: {
+  name: 'utils',
+  test: /src[\\/]js/,
+  // これがasyncだとutilsファイルはindex.htmlに含まれなくなる。 utilsファイルも生成されなくなる。
+  // app.js等にバンドルされるようになる。
+  chunks: 'async' //ここを消すと非同期の読み込みでも同期的な読み込みに変わる。
+},
+```
+
+## Rsolveを使用してファイルパスを短くする
+
+ディレクトリの構造が複雑になってきた際にショートカットとして設定する。
+
+webpack.config.jsのmodule内に下記の設定を追加する
+
+```js
+
+resolve: {
+    alias: {
+      '@scss': path.join(__dirname, 'src/scss'),
+      '@images': path.join(__dirname, 'src/images') 
+    },
+    // importする際の拡張子を省略できる。
+    // import '@scss/app.scss' → '@scss/app'
+    extensions: ['.js', '.scss'],
+    // これを追加すると import jQuery from './node_modules/jquery'
+    // みたいな書き方をしなくてよい。
+    // これに自作のコードも追加する。すると import 'js/sub' でコードを読み込めるようになる。
+    // 画像ファイルの読み込みにも適用される。 
+    modules: [path.join(__dirname, 'src'), 'node_modules']
+  }
+
+```
+
+使用する際
+下記の様にパス設定を行える。
+
+app.scss
+
+```scss
+.bg {
+  // エイリアスで登録したパスで呼び出す場合
+  // background-image: url('~@imgs/doodle.png');
+  // モジュールで登録した方法で呼び出す場合
+  background-image: url('~images/doodle.png');
+  background-size: cover;
+  width: 100px;
+  height: 100px;
+}
+```
 
 
+app.js
+
+```js
+import("@scss/app")
+// 一部省略
+```
+
+## VSCodeの補完機能に上記のパス設定を追加する
+
+jsconfig.jsonというファイルのディレクトリに追加して下記の設定を追加する。
+
+- baseUrl: pathsの親フォルダとなるベースのパスを指定する。
+- path: 左の文字列を入力した際に右側のパスが自動補完される。 
+
+```json
+// vscodeに自動補完機能を持たせる。
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@scss": ["scss"],
+      "scss": ["scss"],
+      "js": ["js"],
+      "images": ["images"],
+    }
+  }
+}
+```
+
+## 複数のHTMLが存在する場合にそれぞれ異なるスクリプトを自動で挿入する
+
+それには `HtmlWebpackPlugin` の設定を新たに1つ追加してそこに別のHTML情報を記述する。
+
+webpack.config.jsのplugins内に下記の設定を追加する。
+これで [http://localhost:8080/other.html](http://localhost:8080/other.html) にアクセスした際に `sub.js` が注入されていることが確認できる。
+
+```js
+plugins: [
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '/src', 'index.html'),
+      inject: 'body', // 分割
+      // app.jsを代入したい場合は下記を記述する。
+      // app.jsはscssとjqueryに依存している。
+      chunks: ['app']
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '/src', 'other.html'),
+      filename: 'other.html',
+      inject: 'body', // 分割
+      // sub.jsはjqueryに依存している。
+      chunks: ['sub']
+    })
+  ]
+```
 
 
 ## webpack.config.jsの設定を開発用と商用で切り分ける。
 
+`webpack-merge` を用いて webpackの設定を `webpack.common.js`（開発用・商用での共通設定）, `webpack.dev.js`（開発用）, `webpack.prod.js`（商用） に分割する。
+
+webpack.common.js
+
+```js
+const path = require('path')
+// jsファイルにバンドルされるはずのcssを分離できる。cssに変更がない場合はキャッシュを利用できるので商用環境では分離をオススメする。
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// const webpack = require('webpack')
+// こうする事で個別でimport出来る。分割代入
+const { ProvidePlugin } = require('webpack')
+
+
+module.exports = ({ outputFile, assetFile }) => ({
+  // 作業ディレクトリがある場合はentryの書き方が変わる
+  context: `${__dirname}/src/js`,
+  // entry: './index.js',
+  // joinを使用するとOSの環境に合わせてパスをいい感じに設定してくれる。
+  entry: {
+    app: path.join(__dirname, '/src', '/js', 'app.js'),
+    // これがないとsub.jsは出力されない。これは同期的な読み込みになる。
+    sub: path.join(__dirname, '/src', '/js', 'sub.js')
+  },
+
+  // defaultの設定つまりあってもなくても一緒
+  // ファイルの起点を設定する。
+  // entry: './src/index.js',
+
+  // ここは絶対パスで指定する必要がある。
+  output: {
+    // path: `${__dirname}/dist`,
+    path: path.join(__dirname, '/dist'),
+    filename: `${outputFile}.js`,
+    assetModuleFilename: `images/${assetFile}[ext]`, // 分割
+    // これがsub_js.jsを出力してる。
+    chunkFilename: `${outputFile}.js`
+  },
+
+
+  // useはしたから実行されていく。
+  // sassをcssに変換 → cssをバンドル → htmlにstyleタグを使ってcssを記述する。順番で実行される。
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        // // eslint導入方法
+        // use:[
+        //   // 'style-loader',
+        //   'babel-loader',
+        //   'eslint-loader'
+        // ],
+        loader: 'babel-loader'
+      },
+      {
+        enforce: 'pre',
+        test:/\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        // eslintのfixオプションをonにするルールに基づいてコードを整形してくれる。
+        options: {
+          fix: true,
+        }
+      },
+      {
+        test:/\.scss$/,
+        use:[
+          // 'style-loader',
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.(ico|svg|jpe?g|png|webp)$/,
+        type: "asset/resource",   // <--- 'file-loader'
+        // または
+        // type: 'asset/inline',  // <--- 'url-loader'
+      },
+      {
+        // htmlWebpackPluginと併用しないと動作しない
+        test: /\.html$/,
+        use: ['html-loader']
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: `${outputFile}.css`, // 分割
+      // chunkFilename: '[name].[hash].css'
+    }),
+    // よく使用するモジュールをimportせずにグローバルにバンドルする事ができる。
+    // これによってapp.js, sub.jsでjqueryが使用できる。
+    new ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      // オリジナル関数をimportなしで使えるようにする。
+      utils: [path.join(__dirname, 'src/js/utils'), 'default']
+    })
+  ],
+  optimization: {
+    splitChunks: {
+      // chunksがasyncだとダイナックimportと呼ばれる非同期のimport方法のみに設定が適用される。
+      // import('./app.scss')
+      // allは普通のimportとダイナミックを分けずにimportする。
+      chunks: 'all',
+      minSize: 0,
+      cacheGroups: {
+        defaultVendors: {
+          name: 'vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          // reuseExistingChunk: true,
+        },
+        // オリジナルの関数をキャッシュに追加する。
+        utils: {
+          name: 'utils',
+          test: /src[\\/]js/,
+          // これがasyncだとutilsファイルはindex.htmlに含まれなくなる。 utilsファイルも生成されなくなる。
+          // app.js等にバンドルされるようになる。
+          chunks: 'async' //ここを消すと非同期の読み込みでも同期的な読み込みに変わる。
+        },
+        default: false,
+      }
+    }
+  },
+  // ファイル等をimportする際にPathを入力しやすくするためにシュートカットを作成する。
+  // 階層が複雑な際に使用すると便利です。
+  resolve: {
+    alias: {
+      '@scss': path.join(__dirname, 'src/scss'),
+      '@imgs': path.join(__dirname, 'src/images') 
+    },
+    // importする際の拡張子を省略できる。
+    // import '@scss/app.scss' → '@scss/app'
+    extensions: ['.js', '.scss'],
+    // これを追加すると import jQuery from './node_modules/jquery'
+    // みたいな書き方をしなくてよい。
+    // これに自作のコードも追加する。すると import 'js/sub' でコードを読み込めるようになる。
+    // 画像ファイルの読み込みにも適用される。 @を使用しなくてよくなる。
+    modules: [path.join(__dirname, 'src'), 'node_modules']
+  }
+})
+```
+
+webpack.dev.js
+
+```js
+const path = require('path')
+
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { merge } = require('webpack-merge')
+const commonConf = require('./webpack.common')
+
+const outputFile = '[name]'
+const assetFile = '[name]'
+
+module.exports = () => merge(commonConf({ outputFile, assetFile }),  {
+  mode: 'development', //分割
+  // これを使用するとchromeの検証でビルド前のファイルも確認できるのでデバックが取りやすくなる。
+  devtool: 'source-map', // 分割
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    port: 8080,
+    host: '0.0.0.0',
+    watchOptions: {
+      ignored: /node_modules/
+    }
+  },
+ 
+  
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '/src', 'index.html'),
+      inject: 'body', // 分割
+      // app.jsを代入したい場合は下記を記述する。
+      // app.jsはscssとjqueryに依存している。
+      chunks: ['app']
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '/src', 'other.html'),
+      filename: 'other.html',
+      inject: 'body', // 分割
+      // sub.jsはjqueryに依存している。
+      chunks: ['sub']
+    })
+  ]
+})
+```
+
+webpack.prod.js
+
+```js
+const path = require('path')
+
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { merge } = require('webpack-merge')
+const commonConf = require('./webpack.common')
+
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+
+const outputFile = '[name].[chunkhash]'
+const assetFile = '[contenthash]'
+
+module.exports = () => merge(commonConf({ outputFile, assetFile }),  {
+  mode: 'production', //分割
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    port: 8080,
+    host: '0.0.0.0',
+    watchOptions: {
+      ignored: /node_modules/
+    }
+  },
+  
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '/src', 'index.html'),
+      inject: 'body', // 分割
+      // コード内のコメント等取り除いて圧縮する。
+      minify: {
+        collapseWhitespace: true,
+        keepClosingSlash: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true
+      }
+    })
+  ],
+  optimization: {
+    minimizer: [
+      (compiler) => {
+        const TerserPlugin = require('terser-webpack-plugin')
+        new TerserPlugin({
+          terserOptions: {
+                compress: {},
+                mangle: true
+            }
+        }).apply(compiler)
+    },
+      new CssMinimizerPlugin(),
+    ]
+  }
+})
+```
+
+これが最終的なwebpackの設定になる。
+ファイルのディレクトリ構成等を確認したい場合は [GitHub-webpack-practice](https://github.com/wimpykid719/webpack-practice)に揚げてあるので確認して下さい。
+
+## 最後に
+
+おそらくこれで `create-react-app` を使用しなくてもReactの環境を構築するのに必要なwebpackの知識は付いたと思うので次回からReactの環境を作成してStripeのサンプルコードを動かしていけたらと思う。
 
 ### 参照
+
 [【Webpack5】file-loaderを使った画像の読み込みがうまくいかない](https://teratail.com/questions/327351)
 
 [Conflict: Multiple assets emit to the same filename](https://stackoverflow.com/questions/42148632/conflict-multiple-assets-emit-to-the-same-filename)

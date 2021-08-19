@@ -13,6 +13,7 @@ module.exports = ({ outputFile, assetFile }) => ({
   // joinを使用するとOSの環境に合わせてパスをいい感じに設定してくれる。
   entry: {
     app: path.join(__dirname, '/src', '/js', 'app.js'),
+    // これがないとsub.jsは出力されない。これは同期的な読み込みになる。
     sub: path.join(__dirname, '/src', '/js', 'sub.js')
   },
 
@@ -26,6 +27,7 @@ module.exports = ({ outputFile, assetFile }) => ({
     path: path.join(__dirname, '/dist'),
     filename: `${outputFile}.js`,
     assetModuleFilename: `images/${assetFile}[ext]`, // 分割
+    // これがsub_js.jsを出力してる。
     chunkFilename: `${outputFile}.js`
   },
 
@@ -109,8 +111,10 @@ module.exports = ({ outputFile, assetFile }) => ({
         // オリジナルの関数をキャッシュに追加する。
         utils: {
           name: 'utils',
-          test: /src[\\/]js[\\/]utils/,
-          chunks: 'initial' //ここを消すと非同期の読み込みでも同期的な読み込みに変わる。
+          test: /src[\\/]js/,
+          // これがasyncだとutilsファイルはindex.htmlに含まれなくなる。 utilsファイルも生成されなくなる。
+          // app.js等にバンドルされるようになる。
+          chunks: 'async' //ここを消すと非同期の読み込みでも同期的な読み込みに変わる。
         },
         default: false,
       }
@@ -121,7 +125,7 @@ module.exports = ({ outputFile, assetFile }) => ({
   resolve: {
     alias: {
       '@scss': path.join(__dirname, 'src/scss'),
-      '@images': path.join(__dirname, 'src/images') 
+      '@imgs': path.join(__dirname, 'src/images') 
     },
     // importする際の拡張子を省略できる。
     // import '@scss/app.scss' → '@scss/app'
@@ -129,7 +133,7 @@ module.exports = ({ outputFile, assetFile }) => ({
     // これを追加すると import jQuery from './node_modules/jquery'
     // みたいな書き方をしなくてよい。
     // これに自作のコードも追加する。すると import 'js/sub' でコードを読み込めるようになる。
-    // 画像ファイルの読み込みにも適用される。 
+    // 画像ファイルの読み込みにも適用される。 @を使用しなくてよくなる。
     modules: [path.join(__dirname, 'src'), 'node_modules']
   }
 })

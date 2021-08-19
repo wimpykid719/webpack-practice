@@ -10,8 +10,10 @@ h1 {
 }
 
 .bg {
-  // background-image: url('~@images/doodle.png');
-  background-image: url('~images/doodle.png');
+  // エイリアスで登録したパスで呼び出す場合
+  background-image: url('~@imgs/doodle.png');
+  // モジュールで登録した方法で呼び出す場合
+  // background-image: url('~images/doodle.png');
   background-size: cover;
   width: 100px;
   height: 100px;

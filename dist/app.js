@@ -37,8 +37,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+// ここでsub.jsを読み込もうとするとsub_js.jsみたいな変なファイルが生成される。
+// import("js/sub")
+__webpack_require__.e(/*! import() */ "scss_app_scss").then(__webpack_require__.bind(__webpack_require__, /*! @scss/app */ "../scss/app.scss"));
 setTimeout(function () {
-  __webpack_require__.e(/*! import() */ "scss_app_scss").then(__webpack_require__.bind(__webpack_require__, /*! @scss/app */ "../scss/app.scss"));
+  __webpack_require__.e(/*! import() */ "utils").then(__webpack_require__.bind(__webpack_require__, /*! js/sub */ "./sub.js"));
 }, 2000); // import utils from './utils'
 // import 'regenerator-runtime'
 // import 'core-js'
@@ -100,6 +103,24 @@ function _asyncFn() {
 
 init();
 jQuery();
+
+/***/ }),
+
+/***/ "./utils/index.js":
+/*!************************!*\
+  !*** ./utils/index.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  log: function log(str) {
+    console.log(str);
+  }
+});
 
 /***/ })
 
@@ -479,7 +500,7 @@ jQuery();
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["utils","vendors"], () => (__webpack_require__("./app.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors"], () => (__webpack_require__("./app.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
